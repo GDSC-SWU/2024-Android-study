@@ -15,4 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "LerningViews"
 include(":app")
+include(":app")
  
