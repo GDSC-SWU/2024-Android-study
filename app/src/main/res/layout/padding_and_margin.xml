@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#d7faea"
+        android:text="패딩, 마진 둘 다 없음"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#4b653b"
+        android:text="패딩, 마진 둘 다 없음"
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#d7faea"
+        android:layout_margin="15dp"
+        android:text="마진만 있음"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#4b653b"
+        android:layout_margin="15dp"
+        android:text="마진만 있음"
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#d7faea"
+        android:padding="10dp"
+        android:text="패딩만 있음"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#4b653b"
+        android:padding="10dp"
+        android:text="패딩만 있음"
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#d7faea"
+        android:padding="10dp"
+        android:layout_margin="15dp"
+        android:text="패딩, 마진 둘 다 있음"
+        android:textSize="20sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#4b653b"
+        android:padding="10dp"
+        android:layout_margin="15dp"
+        android:text="패딩, 마진 둘 다 있음"
+        android:textColor="@color/white"
+        android:textSize="20sp"/>
+
+</LinearLayout>
