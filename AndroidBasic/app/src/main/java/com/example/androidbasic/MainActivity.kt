@@ -8,17 +8,17 @@ import android.widget.Button
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        settingButton()
+        setContentView(R.layout.edittext)
+        // settingButton()
     }
 
-    fun settingButton() {
-        val button = findViewById<Button>(R.id.button)
-        button.setOnClickListener {
-            // subactivity 로 이동
-            // intent : 위치, 지향, 의도
-            val intent = Intent(this, SubActivity::class.java)
-            startActivity(intent)
-        }
-    }
+//    fun settingButton() {
+//        val button = findViewById<Button>(R.id.button)
+//        button.setOnClickListener {
+//            // subactivity 로 이동
+//            // intent : 위치, 지향, 의도
+//            val intent = Intent(this, SubActivity::class.java)
+//            startActivity(intent)
+//        }
+//    }
 }
