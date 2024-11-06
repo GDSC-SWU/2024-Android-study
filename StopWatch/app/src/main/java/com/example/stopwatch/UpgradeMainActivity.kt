@@ -9,7 +9,7 @@ import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import java.util.Timer
 import kotlin.concurrent.timer
 
-class MainActivity : AppCompatActivity() , View.OnClickListener{
+class UpgradeMainActivity : AppCompatActivity() , View.OnClickListener{
     private lateinit var btn_start : Button
     private lateinit var btn_refresh : Button
     private lateinit var tv_minute : TextView
@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main_upgrade)
 
 
         btn_start = findViewById(R.id.btn_start)
@@ -55,8 +55,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
     }
 
     private fun start() {
-        btn_start.text = getString(R.string.btn_pause)
-        btn_start.setBackgroundColor(getColor(R.color.btn_pause))
+        btn_start.text = getString(R.string.btn_pause_eng)
         isrunning = true
 
         timer = timer(period = 10){
@@ -82,9 +81,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
     }
 
     private fun pause() {
-        btn_start.text = getString(R.string.btn_start)
-        btn_start.setBackgroundColor(getColor(R.color.btn_start))
-
+        btn_start.text = getString(R.string.btn_start_eng)
         isrunning = false
         timer?.cancel()
 
@@ -93,8 +90,7 @@ class MainActivity : AppCompatActivity() , View.OnClickListener{
     private fun refresh() {
         timer?.cancel()
 
-        btn_start.text = getString(R.string.btn_start)
-        btn_start.setBackgroundColor(getColor(R.color.btn_start))
+        btn_start.text = getString(R.string.btn_start_eng)
         isrunning = false
 
         time = 0
