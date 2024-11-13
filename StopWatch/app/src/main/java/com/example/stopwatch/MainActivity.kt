@@ -12,12 +12,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var btn_start: Button
     private lateinit var  btn_refresh: Button
-    private lateinit var btn_pause : Button
-
     private lateinit var tv_minute : TextView
     private lateinit var tv_second : TextView
     private lateinit var tv_millisec : TextView
 
+//    스탑워치 실행 확인용 변수
     private var isRunning = false
     private var timer : Timer ? =null
     private var time = 0
@@ -25,7 +24,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         btn_start=findViewById(R.id.btn_start)
         btn_refresh=findViewById(R.id.btn_refresh)
