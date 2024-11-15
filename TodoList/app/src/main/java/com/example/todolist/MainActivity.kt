@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() , OnItemLongClickListener {
 
     private fun setRecyclerView(){
         runOnUiThread{
-            adapter = TodoRecyclerViewAdapter(todoList, this)   // this는 MainActivity 객체 의미
+            adapter = TodoRecyclerViewAdapter(todoList, this)
             binding.recyclerView.adapter = adapter
             binding.recyclerView.layoutManager = LinearLayoutManager(this)
         }
@@ -74,9 +74,9 @@ class MainActivity : AppCompatActivity() , OnItemLongClickListener {
 
     private fun deleteTodo(position: Int){
         Thread{
-            todoDao.deleteTodo(todoList[position]) // DB에서 삭제
-            todoList.removeAt(position) // 리스트에서 삭제
-            runOnUiThread { // UI 관련 작업은 UI 스레드에서
+            todoDao.deleteTodo(todoList[position])
+            todoList.removeAt(position)
+            runOnUiThread {
                 adapter.notifyDataSetChanged()
                 Toast.makeText(this, "삭제되었습니다.", Toast.LENGTH_SHORT).show()
             }

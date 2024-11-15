@@ -8,8 +8,8 @@ import androidx.room.Query
 @Dao
 interface TodoDao {
 
-    // get All
-    @Query("SELECT * FROM TodoEntity ORDER BY importance")  // 중요도 순 -> " ORDER BY importance " 추가!
+
+    @Query("SELECT * FROM TodoEntity ORDER BY importance")
     fun getAllTodo() : List<TodoEntity>
 
     // insert todo

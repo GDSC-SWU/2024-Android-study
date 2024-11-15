@@ -15,13 +15,12 @@ class TodoRecyclerViewAdapter(private val todoList : ArrayList<TodoEntity>, priv
         val root = binding.root
     }
 
-    // MyViewHolder 객체로 반환, ViewHolder를 만듦
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding : ItemTodoBinding = ItemTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MyViewHolder(binding)
     }
 
-    // 만든 ViewHolder 객체의 데이터를 넣어줌
+
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val todoData = todoList[position]
 
@@ -37,18 +36,17 @@ class TodoRecyclerViewAdapter(private val todoList : ArrayList<TodoEntity>, priv
             }
         }
 
-        // 중요도에 따라 중요도 변경
+
         holder.tv_importance.text = todoData.importance.toString()
         // 할 일 제목 변경
         holder.tv_title.text = todoData.title
 
         holder.root.setOnLongClickListener {
             listener.onLongClick(position)
-            false   // false라고 하면, 다른 클릭이벤트들도 실행, true라고 하면 오직 onLongClick만 실행
+            false
         }
     }
 
-    // 아이템이 몇개인지 알려주는 함수
     override fun getItemCount(): Int {
         return todoList.size
     }

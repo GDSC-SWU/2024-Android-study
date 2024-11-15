@@ -28,7 +28,6 @@ class AddTodoActivity : AppCompatActivity() {
         }
     }
 
-    // 할 일 추가
     private fun insertTodo(){
         val todoTitle = binding.edtTitle.text.toString()
         var todoImportance = binding.radioGroup.checkedRadioButtonId
