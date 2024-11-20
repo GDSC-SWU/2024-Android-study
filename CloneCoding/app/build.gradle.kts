@@ -1,8 +1,15 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.kapt")
 }
+
+val localPropertiesFile = rootProject.file("local.properties")
+val properties = Properties()
+properties.load(FileInputStream(localPropertiesFile))
 
 android {
     namespace = "com.withoutsummer.misemise"
@@ -15,6 +22,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        buildConfigField("String", "API_KEY", "\"${properties["airqualityapi.key"]}\"")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -35,8 +43,9 @@ android {
         jvmTarget = "1.8"
     }
 
-    viewBinding{
-        enable = true
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true // 기존 설정 유지
     }
 }
 

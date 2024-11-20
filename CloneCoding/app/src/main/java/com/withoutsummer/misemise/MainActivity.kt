@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
         retrofitAPI.getAirQualityData(
             latitude.toString(),
             longitude.toString(),
-            "f978fe52-953d-4fba-aa55-3dd5861cba26"
+            "${BuildConfig.API_KEY}"
         ).enqueue(object :Callback<AirQualityResponse>{
             override fun onResponse(
                 call: Call<AirQualityResponse>,
