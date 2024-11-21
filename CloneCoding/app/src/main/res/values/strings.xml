@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CloneCoding</string>
+    <string name="mesured_at">측정 시간</string>
 </resources>
