@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(), OnItemLongClickListener {
 
     private fun setRecyclerView(){
         runOnUiThread{
-            adapter= TodoRecyclerViewAdapter(todoList,this)
+            adapter= TodoRecyclerViewAdapter(todoList,this) 
             binding.recyclerview.adapter=adapter
             binding.recyclerview.layoutManager=LinearLayoutManager(this)
         }
