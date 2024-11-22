@@ -1,4 +1,4 @@
-package com.example.clonecoding
+package com.rinylecture.AirQuality
 
 import org.junit.Test
 
