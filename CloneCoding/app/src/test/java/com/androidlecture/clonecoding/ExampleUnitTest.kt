@@ -1,4 +1,4 @@
-package com.example.clonecoding
+package com.androidlecture.clonecoding
 
 import org.junit.Test
 
