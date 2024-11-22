@@ -1,4 +1,4 @@
-package com.example.clonecoding
+package sohyun.example.clonecoding
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

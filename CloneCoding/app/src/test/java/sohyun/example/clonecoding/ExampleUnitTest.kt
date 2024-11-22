@@ -1,4 +1,4 @@
-package com.example.clonecoding
+package sohyun.example.clonecoding
 
 import org.junit.Test
 
