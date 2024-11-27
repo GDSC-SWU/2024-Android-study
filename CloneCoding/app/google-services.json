@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "849838942702",
+    "project_id": "airquality1-442909",
+    "storage_bucket": "airquality1-442909.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849838942702:android:3e9154e4372724f1ed06ff",
+        "android_client_info": {
+          "package_name": "com.sohyun.airquality"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeiS3pk6X-9eSNgEuXd5g7OA0t5LBgLAc"
+        },
+        {
+          "current_key": "AIzaSyAH5_v6DMf80yHtGKus2SRDrhyyxBtj_4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849838942702:android:934799b9515441e7ed06ff",
+        "android_client_info": {
+          "package_name": "com.sohyun.clonecoding"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeiS3pk6X-9eSNgEuXd5g7OA0t5LBgLAc"
+        },
+        {
+          "current_key": "AIzaSyAH5_v6DMf80yHtGKus2SRDrhyyxBtj_4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
