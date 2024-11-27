@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "906778308679",
+    "project_id": "airquality-442814",
+    "storage_bucket": "airquality-442814.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:906778308679:android:0375010c48c7c749450162",
+        "android_client_info": {
+          "package_name": "com.androidlecture.clonecoding"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDmR2wGnIGQB0eLWhjfyOAsHCHeipyVP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
