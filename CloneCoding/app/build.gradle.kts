@@ -5,6 +5,9 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
+    // Add the Google services Gradle plugin
+    id("com.google.gms.google-services")
+
 }
 
 val localPropertiesFile = rootProject.file("local.properties")
@@ -62,4 +65,15 @@ dependencies {
     //Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Google map
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation("com.google.android.gms:play-services-maps-license:12.0.1")
+
+    //firebase
+    implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
+    implementation("com.google.firebase:firebase-analytics")
+
+    //admob
+    implementation("com.google.android.gms:play-services-ads:23.5.0")
 }

@@ -10,13 +10,24 @@ import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.rinylecture.AirQuality.databinding.ActivityMainBinding
 import com.rinylecture.AirQuality.retrofit.AirQualityResponse
 import com.rinylecture.AirQuality.retrofit.AirQualityService
@@ -33,17 +44,39 @@ import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
+    var mInterstitialAd : InterstitialAd? = null
+
     lateinit var binding : ActivityMainBinding
+
+    // 위도와 경도를 가져올 때 필요
     lateinit var locationProvider: LocationProvider
 
+    // 런타임 권한 요청 시 필요한 요청 코드
     private val PERMISSIONS_REQUEST_CODE =  100
 
+    var latitude : Double? = 0.0
+    var longitude : Double? = 0.0
+
+    // 요청할 권한 목록
     val REQUIRED_PERMISSIONS = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
 
+    // 위치 서비스 요청 시 필요한 런처
     lateinit var getGPSPermissionLauncher : ActivityResultLauncher<Intent>
+
+    val startMapActivityResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult(),
+    object : ActivityResultCallback<ActivityResult>{
+        override fun onActivityResult(result: ActivityResult) {
+            if(result?.resultCode?: 0 == Activity.RESULT_OK){
+                latitude = result?.data?.getDoubleExtra("latitude",0.0) ?: 0.0
+                longitude = result?.data?.getDoubleExtra("longitude",0.0) ?: 0.0
+                updateUI()
+            }
+        }
+    }
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,34 +86,90 @@ class MainActivity : AppCompatActivity() {
         checkAllPermissions()
         updateUI()
         setRefreshButton()
+
+        setFab()
+        setBannerAds()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setInterstitialAds()
+    }
+
+    private fun setInterstitialAds(){
+        val adRequest = AdRequest.Builder().build()
+
+                InterstitialAd.load(this, "/21775744923/example/interstitial", adRequest, object : InterstitialAdLoadCallback(){
+                    override fun onAdLoaded(p0: InterstitialAd) {
+                        super.onAdLoaded(p0)
+
+                        Log.d("Ads Log", "전면 광고가 로드 성공했습니다.")
+                        mInterstitialAd = p0
+                    }
+
+                    override fun onAdFailedToLoad(p0: LoadAdError) {
+                        super.onAdFailedToLoad(p0)
+                        Log.d("Ads Log", "전면 광고가 ")
+                    }
+                })
+    }
+
+    private fun setBannerAds(){
+        MobileAds.initialize(this)
+        val adRequest = AdRequest.Builder().build()
+        binding.adsBanner.loadAd(adRequest)
+
+        binding.adsBanner.adListener = object : AdListener(){
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                Log.d("Ads Log", "배너 광고가 로드 되었습니다.")
+            }
+
+            override fun onAdFailedToLoad(p0: LoadAdError) {
+                super.onAdFailedToLoad(p0)
+                Log.d("Ads Log", "배너 광고가 로드 실패되었습니다.")
+            }
+
+            override fun onAdClicked() {
+                super.onAdClicked()
+                Log.d("Ads Log", "배너 광고가 클릭되었습니다.")
+            }
+        }
     }
 
     private fun updateUI(){
         locationProvider = LocationProvider(this@MainActivity)
 
-        val latitude: Double? = locationProvider.getLocationLatitude()
-        val longitude: Double? = locationProvider.getLocationLongitude()
+        if(latitude == 0.0 && longitude == 0.0) {
+            // 위도와 경도 정보 가져오기
+            latitude = locationProvider.getLocationLatitude()
+            longitude = locationProvider.getLocationLongitude()
+        }
 
         if(latitude != null && longitude != null){
             // 1. 현재 위치 가져오고 UI 업데이트
-            val address = getCurrentAddress(latitude, longitude)
+            // 현재 위치 가져오기
+            val address = getCurrentAddress(latitude!!, longitude!!)
 
+            // 주소가 null이 아닐 경우 UI 업데이트
             address?.let{
                 binding.tvLocationTitle.text = "${it.thoroughfare}"
                 binding.tvLocationSubtitle.text = "${it.countryName} ${it.adminArea}"
             }
             // 2. 미세먼지 농도 가져오고 UI 업데이트
-            getAirQualityData(latitude, longitude)
+            getAirQualityData(latitude!!, longitude!!)
         }else{
             Toast.makeText(this,"위도, 경도 정보를 가져올 수 없습니다.", Toast.LENGTH_LONG).show()
         }
     }
 
     private fun getAirQualityData(latitude: Double, longitude: Double){
+        // Retrofit API 인터페이스 생성
         var retrofitAPI = RetrofitConnection.getInstance().create(
             AirQualityService::class.java
         )
 
+        // API 호출 실행
         retrofitAPI.getAirQualityData(
             latitude.toString(),
             longitude.toString(),
@@ -102,9 +191,7 @@ class MainActivity : AppCompatActivity() {
                 t.printStackTrace()
                 Toast.makeText(this@MainActivity, "데이터를 가져오는 데 실패했습니다.", Toast.LENGTH_LONG).show()
             }
-        }
-        )
-        // execute
+        })
     }
 
     private fun updateAirUI(airQualityData : AirQualityResponse){
@@ -148,6 +235,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setFab(){
+        binding.fab.setOnClickListener{
+
+            if(mInterstitialAd!=null){
+                mInterstitialAd!!.fullScreenContentCallback = object : FullScreenContentCallback(){
+                    override fun onAdDismissedFullScreenContent() {
+                        super.onAdDismissedFullScreenContent()
+                        Log.d("Ads Log", "전면 광고 닫혔습니다.")
+                        val intent = Intent(this@MainActivity, MapActivity::class.java)
+                        intent.putExtra("currentLat", latitude)
+                        intent.putExtra("currentLng", longitude)
+                        startMapActivityResult.launch(intent)
+                    }
+
+                    override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                        super.onAdFailedToShowFullScreenContent(p0)
+                        Log.d("Ads Log", "전면 광고 열기 실패했습니다.")
+                    }
+
+                    override fun onAdShowedFullScreenContent() {
+                        super.onAdShowedFullScreenContent()
+                        Log.d("Ads Log", "전면 광고 열기 성공했습니다.")
+                        mInterstitialAd = null
+                    }
+                }
+
+                mInterstitialAd!!.show(this@MainActivity)
+
+            }else{
+                Log.d("Ads Log", "전면 광고가 로딩이 안 되었습니다.")
+                Toast.makeText(this, "잠시 후 시도해주세요.", Toast.LENGTH_LONG).show()
+            }
+
+
+        }
+    }
+
     private fun getCurrentAddress(latitude: Double, longitude: Double) : Address? {
         val geoCoder = Geocoder(this, Locale.KOREA)
         val addresses : List<Address>?
@@ -171,14 +295,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkAllPermissions(){
-        if(!isLocationServiceAvailabale()){
+        if(!isLocationServiceAvailable()){
             showDialogForLocationServiceSetting()
         }else {
             isRunTimePermissionGranted()
         }
     }
 
-    private fun isLocationServiceAvailabale() : Boolean{
+    private fun isLocationServiceAvailable() : Boolean{
         val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
 
         return (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled((LocationManager.NETWORK_PROVIDER)))
@@ -225,7 +349,7 @@ class MainActivity : AppCompatActivity() {
             ActivityResultContracts.StartActivityForResult()
         ){ result ->
             if(result.resultCode == Activity.RESULT_OK){
-                if(isLocationServiceAvailabale()){
+                if(isLocationServiceAvailable()){
                     isRunTimePermissionGranted()
                 }else{
                     Toast.makeText(this, "위치 서비스를 사용할 수 없습니다.", Toast.LENGTH_LONG).show()

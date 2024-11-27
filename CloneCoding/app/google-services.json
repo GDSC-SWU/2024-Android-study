@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "600435955305",
+    "project_id": "airquality1-31914",
+    "storage_bucket": "airquality1-31914.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:600435955305:android:fccfcff31cd66d93d4b4f8",
+        "android_client_info": {
+          "package_name": "com.rinylecture.airquality"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3JQsTlwSiTpXkUxgz6-PKn13AWwvVvmU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
