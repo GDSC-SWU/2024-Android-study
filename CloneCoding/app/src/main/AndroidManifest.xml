@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET"/> <!--인터넷 권한 허가-->
-
-    <!--GPS location 권한 허가-->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- 인터넷 권한 허가 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 인터넷 권한 허가 -->
+    <!-- GPS location 권한 허가 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +17,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CloneCoding"
         tools:targetApi="31">
+        <activity
+            android:name=".MapActivity"
+            android:exported="false" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBEI3cIvowVKrMXUNjJASYjiA8V_JQR1Jc" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-6879189382369126~6463815115"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
