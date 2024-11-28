@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1070719366521",
+    "project_id": "airquality-442812",
+    "storage_bucket": "airquality-442812.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1070719366521:android:1f660626647e0b7aa32ba8",
+        "android_client_info": {
+          "package_name": "com.withoutsummer.misemise"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQKW7U1sQiLpXzZeIH68kpVDNJqlPpzDU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
