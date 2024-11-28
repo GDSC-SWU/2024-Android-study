@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1056341123232",
+    "project_id": "airquality-442906",
+    "storage_bucket": "airquality-442906.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1056341123232:android:015d4f480df3a1a647e9c5",
+        "android_client_info": {
+          "package_name": "com.swu.clonecoding"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_8xYEGJSyfOaRenGKhMbqC5r908UWLyU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
