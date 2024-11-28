@@ -19,7 +19,18 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.ning.clonecoding.databinding.ActivityMainBinding
 import android.provider.Settings
+import android.util.Log
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
 import androidx.annotation.RequiresApi
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.ning.clonecoding.retrofit.AirQualityResponse
 import com.ning.clonecoding.retrofit.AirQualityService
 import com.ning.clonecoding.retrofit.RetrofitConnection
@@ -34,10 +45,15 @@ import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
+    var mInterstitialAd:InterstitialAd?=null
+
     lateinit var binding: ActivityMainBinding
     lateinit var locationProvider: LocationProvider
 
     private val PERMISSIONS_REQUEST_CODE = 100
+
+    var latitude:Double?=0.0
+    var longitude:Double?=0.0
 
     val REQUIRED_PERMISSIONS = arrayOf(
         Manifest.permission.ACCESS_FINE_LOCATION,
@@ -45,6 +61,19 @@ class MainActivity : AppCompatActivity() {
     )
 
     lateinit var getGPSPermissionLauncher: ActivityResultLauncher<Intent>
+
+
+    val startMapActivityResult=registerForActivityResult(ActivityResultContracts.StartActivityForResult(),
+        object:ActivityResultCallback<ActivityResult>{
+            override fun onActivityResult(result: ActivityResult) {
+                if(result?.resultCode?:0==Activity.RESULT_OK){
+                    latitude=result?.data?.getDoubleExtra("latitude",0.0)?:0.0
+                    longitude=result?.data?.getDoubleExtra("longitude",0.0)?:0.0
+                    updateUI()
+                }
+            }
+        }
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,17 +83,68 @@ class MainActivity : AppCompatActivity() {
         checkALLPermissions()
         updateUI()
         setRefreshButton()
+
+        setFab()
+        setBannerAds()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setInterstitialAds()
+    }
+
+    private fun setInterstitialAds(){
+        val adRequest=AdRequest.Builder().build()
+
+        InterstitialAd.load(this,"/21775744923/example/interstitial",adRequest,object:InterstitialAdLoadCallback(){
+            override fun onAdLoaded(p0: InterstitialAd) {
+                super.onAdLoaded(p0)
+
+                Log.d("Ads Log","전면 광고가 로드 성공했습니다.")
+                mInterstitialAd=p0
+            }
+
+            override fun onAdFailedToLoad(p0: LoadAdError) {
+                super.onAdFailedToLoad(p0)
+                Log.d("Ads Log","전면 광고가 로드 실패했습니다.")
+            }
+        })
+    }
+
+    private fun setBannerAds(){
+        MobileAds.initialize(this)
+        val adRequest=AdRequest.Builder().build()
+        binding.adsBanner.loadAd(adRequest)
+
+        binding.adsBanner.adListener=object:AdListener(){
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                Log.d("Ads Log","배너 광고가 로드 되었습니다.")
+            }
+
+            override fun onAdFailedToLoad(p0: LoadAdError) {
+                super.onAdFailedToLoad(p0)
+                Log.d("Ads Log","배너 광고가 로드 실패되었습니다.")
+            }
+
+            override fun onAdClicked() {
+                super.onAdClicked()
+                Log.d("Ads Log","배너 광고가 클릭되었습니다.")
+            }
+        }
     }
 
     private fun updateUI() {
         locationProvider = LocationProvider(this@MainActivity)
 
-        val latitude: Double? = locationProvider.getLocationLatitude()
-        val longitude: Double? = locationProvider.getLocationLongitude()
-
+        if(latitude==0.0&&longitude==0.0) {
+            latitude = locationProvider.getLocationLatitude()
+            longitude = locationProvider.getLocationLongitude()
+        }
         if (latitude != null && longitude != null) {
             //1. 현재 위치 가져오고 UI 업데이트
-            val address = getCurrentAddress(latitude, longitude)
+            val address = getCurrentAddress(latitude!!, longitude!!)
 
             address?.let {
                 binding.tvLocationTitle.text = "${it.thoroughfare}"
@@ -72,7 +152,7 @@ class MainActivity : AppCompatActivity() {
             }
             //2. 미세먼지 농도 가져오고 UI 업데이트
 
-            getAirQualityData(latitude, longitude)
+            getAirQualityData(latitude!!, longitude!!)
         } else {
             Toast.makeText(this, "위도, 경도 정보를 가져올 수 없습니다.", Toast.LENGTH_LONG).show()
         }
@@ -149,7 +229,42 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setFab() {
+        binding.fab.setOnClickListener {
+            if (mInterstitialAd != null) {
+                mInterstitialAd!!.fullScreenContentCallback = object : FullScreenContentCallback() {
+                    override fun onAdDismissedFullScreenContent() {
+                        super.onAdDismissedFullScreenContent()
+                        Log.d("Ads.Log", "전면 광고 닫혔습니다.")
+                        val intent = Intent(this@MainActivity, MapActivity::class.java)
+                        intent.putExtra("currentLat", latitude)
+                        intent.putExtra("currentLng", longitude)
+                        startMapActivityResult.launch(intent)
 
+                    }
+
+                    override fun onAdFailedToShowFullScreenContent(p0: AdError) {
+                        super.onAdFailedToShowFullScreenContent(p0)
+                        Log.d("Ads.Log", "전면 광고 열기 실패했습니다.")
+                    }
+
+                    override fun onAdShowedFullScreenContent() {
+                        super.onAdShowedFullScreenContent()
+                        Log.d("Ads.Log", "전면 광고 열기 성공했습니다.")
+                        mInterstitialAd=null
+                    }
+                }
+
+                mInterstitialAd!!.show(this@MainActivity)
+            } else {
+                Log.d("Ads.Log", "전면 광고가 로딩이 안되었습니다.")
+                Toast.makeText(this, "잠시 후 시도해주세요.", Toast.LENGTH_LONG).show()
+            }
+
+
+        }
+
+    }
 
     private fun getCurrentAddress(latitude:Double, longitude:Double):Address?{
         val getCoder=Geocoder(this, Locale.KOREA)
