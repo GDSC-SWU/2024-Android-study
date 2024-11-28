@@ -5,4 +5,7 @@
 
     <color name="text_gray">#4C4C4C</color>
     <color name="text_light_gray">#999999</color>
+
+    <color name="orange">#FF6E40</color>
+    <color name="transparent_orange">#C3FF6E40</color>
 </resources>
